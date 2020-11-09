@@ -1,0 +1,28 @@
+.dtBase {
+  background-color: #aaa;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 10px 0px 10px;
+}
+.dtTable {
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  border-color: #333333;
+}
+.dtTable > tr {
+  border-width: 0px;
+}
+
+.dtHeader > th {
+  background-color: rebeccapurple;
+}
+.dtHeader > th > a,
+.dtHeader > th > div {
+  color: #fff;
+  height: 40px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

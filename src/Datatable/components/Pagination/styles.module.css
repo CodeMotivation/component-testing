@@ -1,0 +1,12 @@
+.dtPagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: red;
+  padding: 3px;
+}
+.dtPaginationNumbers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

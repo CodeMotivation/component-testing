@@ -1,0 +1,6 @@
+.dtDashboard {
+  display: flex;
+  height: 75px;
+  align-items: center;
+  justify-content: space-around;
+}
