@@ -1,19 +1,39 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './styles.module.css'
-export const Pagination = () => {
+export const Pagination = ({count,maximunRows,onPaginationChange,selectedPage}) => {
+    let pages = []
+    const paginationInitializer = ()=>{
+        pages = []
+        let pagesToPrint = count;
+        let pagesCounter = 1;
+        while(pagesToPrint>0){
+            pages.push(
+            <button 
+            key={pagesCounter}
+                className={`${styles.dtPaginationNumber} ${selectedPage===pagesCounter?styles.dtPaginationSelectedNumber:''}`}
+                onClick={(e)=>{onPaginationChange(e)}}
+                >
+                {pagesCounter}
+            </button>
+            )
+                pagesToPrint-=maximunRows;
+                pagesCounter++;
+        }
+    }
+    paginationInitializer()
+    useEffect(() => {
+        paginationInitializer()
+    }, [count,maximunRows])
+    
+
     return (
         <div className={styles.dtPagination}>
-            <div className={styles.paginationNumbers}>
-                <button className={styles.paginationNumber}>
+            <div className={styles.dtPaginationNumbers}>
+                <button className={styles.dtPaginationNumber}>
                     {'<'}
                 </button>
-                <button className={styles.paginationNumber}>
-                    1
-                </button>
-                <button className={styles.paginationNumber}>
-                    2
-                </button>
-                <button className={styles.paginationNumber}>
+                    {pages}
+                <button className={styles.dtPaginationNumber}>
                     {'>'}
                 </button>
             </div>

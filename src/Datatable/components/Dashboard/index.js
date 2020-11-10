@@ -1,11 +1,11 @@
 import React from 'react'
 import styles from './styles.module.css'
 
-export const Dashboard = ({onSearchChange,onRowCountChange}) => {
+export const Dashboard = ({onSearchChange,onRowCountChange,onUpdate}) => {
     return (
         <div className={styles.dtDashboard}>
             <div>
-                <input onChange={(e)=>{onSearchChange(e)}}  type='text' placeholder='search...'></input>
+                <input className={styles.dtDashboardSearchInput} onChange={(e)=>{onSearchChange(e)}}  type='text' placeholder='search...'></input>
             </div>
             <div>
             <span>rows count &nbsp;</span>
@@ -17,7 +17,7 @@ export const Dashboard = ({onSearchChange,onRowCountChange}) => {
             </select>
             </div>
             <div>
-                <button>Refresh</button>
+                <button onClick={(e)=>{onUpdate(e)}}>Refresh</button>
             </div>
             <div>
                 <button>+ Split payment</button>

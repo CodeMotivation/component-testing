@@ -2,11 +2,18 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background-color: red;
   padding: 3px;
 }
 .dtPaginationNumbers {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 10px 2px 2px 0px;
+}
+.dtPaginationNumber {
+  margin: 0px 2px 0px 2px;
+  font-size: 16px;
+}
+.dtPaginationSelectedNumber {
+  color: #6354c4;
 }

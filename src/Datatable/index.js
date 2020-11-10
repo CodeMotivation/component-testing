@@ -29,59 +29,61 @@ export const Datatable
     
 
      //effects
+         //when filterChanges change
+    useEffect(() => {       
+        if(filterChanges.rows||filterChanges.sort||filterChanges.text){
+            //  console.log(filterChanges)
+             dataSetEffects(searchFilteredDataset); 
+        }
+     }, [filterChanges])
      //when search field changes
      useEffect(() => {
         setFilterChanges({...filterChanges, text:true});
-        console.log('searchfilter')
     }, [searchFilter])
     //when row filters changes
     useEffect(() => {
         setFilterChanges({...filterChanges, rows:true});
-    // }, [filters.maximunRows,filters.page])
-    },[])
+    }, [filters.maximunRows,filters.page])
     //when sort changes
     useEffect(() => {
         setFilterChanges({...filterChanges, sort:true});
-    // }, [filters.sortColumn,filters.sortOrder])
-    },[])
-    //when filterChanges change
-    useEffect(() => {
-         dataSetEffects(searchFilteredDataset);
-    //  }, [filterChanges])
-     },[])
+    }, [filters.sortColumn,filters.sortOrder])
      
      //events
      const onSearchChange = (e)=>{
         setSearchFilter(e.target.value);      
     }
     const onRowCountChange = (e)=>{
-        const count = e.target.value
-        if(typeof count === 'number')setFilters({...filters,maximunRows:parseInt(count)})
+        const count = parseInt(e.target.value)
+        if(typeof count === 'number') setFilters({...filters,maximunRows:count})
     }
-    const onPaginationChange = ()=>{
-
+    const onPaginationChange = (e)=>{
+        const page = parseInt(e.target.innerText);
+        if(typeof page === 'number') setFilters({...filters,page:page});
     }
 
      //methods
     const dataSetEffects = (inputDataSet)=>{
-        const _filterChanges = filterChanges
+        const _filterChanges = {...filterChanges}
             //si hubo un cambio en el filtro de texto, filtrar la data
-            if(_filterChanges.text){
+            if(filterChanges.text){
                 inputDataSet = rowSearchUpdate(initialDataset);
-                setSearchFilter(inputDataSet);
+                setsearchFilteredDataset(inputDataSet);
                 _filterChanges.text=false;
             }
             //si hubo un cambio en el orden filtrar el orden
-            if(_filterChanges.sort){
+            if(filterChanges.sort||filterChanges.text){
                 inputDataSet = rowSortUpdate(inputDataSet);
-                setSearchFilter(inputDataSet);
+                setsearchFilteredDataset(inputDataSet);
                 _filterChanges.sort=false;
             }
             //si hubo cambios en la paginación cortar lo seleccionado
-            if(_filterChanges.rows){
-                inputDataSet = rowCountUpdate(inputDataSet);
+            if(filterChanges.rows||filterChanges.sort||filterChanges.text){
+                const pages = paginationFixer(inputDataSet)
+                inputDataSet = rowCountUpdate(inputDataSet,pages);
                 _filterChanges.rows=false;
             }
+            setFilterChanges(_filterChanges)
             setDataSet(inputDataSet);
     }
     const rowSearchUpdate = (_dataset)=>{
@@ -94,15 +96,23 @@ export const Datatable
                        item['Order Date'].includes(filterText)
             });
             return newDataset;
+         }else{
+             return _dataset
          }
     }
-    const rowCountUpdate = (_dataset)=>{
-        const start = 0+((filters.page-1)*filters.maximunRows);
+    const rowCountUpdate = (_dataset,page)=>{
+        const start = 0+((page-1)*filters.maximunRows);
         const end = start + filters.maximunRows;
         return _dataset.slice(start,end);
     }
     const rowSortUpdate = (_dataset)=>{
         return _dataset;
+    }
+    const paginationFixer = (_dataset)=>{
+        const count = _dataset.length
+        const res = count/filters.maximunRows;
+        console.log(count+' '+filters.maximunRows+' '+res)
+        return res<=1?1:filters.page;
     }
 
       //TODO:eliminar estos solo son de prueba
@@ -111,6 +121,9 @@ export const Datatable
     }
     const onCancel = (item)=>{
         console.log('cancel ' + item)
+    }
+    const onUpdate = (item)=>{
+        console.log('update')
     }
 
 
@@ -147,18 +160,18 @@ export const Datatable
 
     return (
         <div className={styles.dtBase}>   
-        <Dashboard onSearchChange={onSearchChange} onRowCountChange={onRowCountChange}></Dashboard>
+        <Dashboard onSearchChange={onSearchChange} onRowCountChange={onRowCountChange} onUpdate={onUpdate}></Dashboard>
             <table className={styles.dtTable}>
                 {/* header section */}
                 <thead>
                     <tr className={styles.dtHeader}>
-                        <th><a href='#'>* {'Order Date'}</a></th>
-                        <th><a href='#'>* {'Name'}</a></th>
-                        <th><a href='#'>* {'Status'}</a></th>
-                        <th><a href='#'>* {'Paid Account'}</a></th>
-                        <th><a href='#'>* {'Type'}</a></th>
-                        <th><a href='#'>* {'Email'}</a></th>
-                        <th><a href='#'>* {'Deadline'}</a></th>
+                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Order Date'}</a></th>
+                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Name'}</a></th>
+                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Status'}</a></th>
+                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Paid Account'}</a></th>
+                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Type'}</a></th>
+                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Email'}</a></th>
+                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Deadline'}</a></th>
                         <th><div>{'Actions'}</div></th>
                     </tr>
                 </thead>
@@ -175,7 +188,11 @@ export const Datatable
                 })}
                 </tbody>
             </table>
-            <Pagination/>
+            <Pagination 
+                selectedPage = {filters.page}
+                count = {searchFilteredDataset.length} 
+                maximunRows={filters.maximunRows} 
+                onPaginationChange={onPaginationChange} />
         </div>
     )
 }

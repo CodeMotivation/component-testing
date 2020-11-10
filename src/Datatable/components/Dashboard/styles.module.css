@@ -4,3 +4,15 @@
   align-items: center;
   justify-content: space-around;
 }
+.dtDashboard button {
+  font-size: 16px;
+  font-weight: 500;
+}
+.dtDashboardSearchInput {
+  transition: 0.2s;
+}
+.dtDashboardSearchInput:focus {
+  outline: none;
+  border-color: #6354c4;
+  border-width: 2px;
+}

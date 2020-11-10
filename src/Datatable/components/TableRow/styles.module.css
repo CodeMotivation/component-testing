@@ -3,3 +3,24 @@
   align-items: center;
   justify-content: center;
 }
+.dtActions button {
+  border: none;
+  padding: 3px 8px 3px 8px;
+}
+.dtActions .dtActionEdit {
+  border-radius: 5px 0px 0px 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.dtActions .dtActionCancel {
+  border-radius: 0px 5px 5px 0px;
+  color: #ffffff;
+  background-color: #f25a5c;
+}
+.dtActions .dtActionCancel:hover {
+  background-color: #dddddd;
+  color: #f25a5c;
+}
+.dtTableRow {
+  height: 40px;
+}

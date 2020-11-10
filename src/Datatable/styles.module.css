@@ -1,8 +1,31 @@
 .dtBase {
-  background-color: #aaa;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   padding: 0px 10px 0px 10px;
+}
+.dtBase button {
+  border: none;
+  background-color: #eeeeee;
+  padding: 3px 8px 3px 8px;
+  transition: 0.25s;
+}
+.dtBase button:hover {
+  background-color: rgba(99, 84, 196, 1);
+  color: white;
+}
+.dtBase a {
+  text-decoration: none;
+}
+.dtBase input {
+  font-size: 18px;
+}
+.dtBase *:focus {
+  outline: none;
+}
+
+.dtBase select {
+  font-size: 18px;
 }
 .dtTable {
   border: solid;
@@ -13,16 +36,38 @@
 .dtTable > tr {
   border-width: 0px;
 }
+.dtTable tr:nth-child(even) {
+  background-color: rgba(99, 84, 196, 0.11);
+}
+.dtTable tr:hover {
+  background-color: rgba(99, 84, 196, 0.16);
+}
 
 .dtHeader > th {
-  background-color: rebeccapurple;
+  background-color: #6354c4;
 }
 .dtHeader > th > a,
 .dtHeader > th > div {
-  color: #fff;
+  color: #ffffff;
   height: 40px;
   width: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.dtHeader a {
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.dtHeader a:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.dtSortArrow {
+  transition: 0.1s;
+}
+.dtSortArrowDown {
+  transition: 0.1s;
 }

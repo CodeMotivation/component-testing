@@ -3,7 +3,7 @@ import styles from './styles.module.css'
 
 export const TableRow = ({item,onEdit,onCancel}) => {
     return (
-        <tr>
+        <tr className={styles.dtTableRow}>
             <td>{item['Order Date']}</td>
             <td>{item['Name']}</td>
             <td>{item['Status']}</td>
@@ -13,8 +13,8 @@ export const TableRow = ({item,onEdit,onCancel}) => {
             <td>{item['Deadline']}</td>
             <td>
                 <div className={styles.dtActions}>
-                    <button onClick={()=>{onEdit(item.id)}}>Edit</button>
-                    <button onClick={()=>{onCancel(item.id)}}>Cancel</button>
+                    <button className={styles.dtActionEdit} onClick={()=>{onEdit(item.id)}}>Edit</button>
+                    <button className={styles.dtActionCancel} onClick={()=>{onCancel(item.id)}}>Cancel</button>
                 </div>
             </td>
         </tr>
