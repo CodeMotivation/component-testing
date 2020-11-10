@@ -58,8 +58,29 @@ export const Datatable
         if(typeof count === 'number') setFilters({...filters,maximunRows:count})
     }
     const onPaginationChange = (e)=>{
-        const page = parseInt(e.target.innerText);
-        if(typeof page === 'number') setFilters({...filters,page:page});
+        const pageText = e.target.innerText;
+        const page = parseInt(pageText);
+        if(typeof page === 'number') setFilters({...filters,page:page})
+        else {
+            switch(pageText){
+                case '<':
+                    const p = filters.page;
+                    setFilters({...filters,page:(p>1?p-1:1)})
+                    break;
+                case '>':
+                    const p = filters.page;
+                    setFilters({...filters,page:(p>1?p-1:1)})
+                    break;
+                case '<<':
+                    setFilters({...filters,page:1})
+                    break;
+                case '>>':
+                    let p = filters.page;
+                    setFilters({...filters,page:(p>1?p-1:1)})
+                    break;
+                
+            }
+        }
     }
 
      //methods

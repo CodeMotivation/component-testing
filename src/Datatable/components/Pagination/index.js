@@ -29,11 +29,15 @@ export const Pagination = ({count,maximunRows,onPaginationChange,selectedPage}) 
     return (
         <div className={styles.dtPagination}>
             <div className={styles.dtPaginationNumbers}>
-                <button className={styles.dtPaginationNumber}>
+                <button 
+                onClick={(e)=>{onPaginationChange(e)}}
+                className={styles.dtPaginationNumber}>
                     {'<'}
                 </button>
                     {pages}
-                <button className={styles.dtPaginationNumber}>
+                <button 
+                onClick={(e)=>{onPaginationChange(e)}}
+                className={styles.dtPaginationNumber}>
                     {'>'}
                 </button>
             </div>

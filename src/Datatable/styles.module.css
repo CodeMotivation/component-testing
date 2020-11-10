@@ -7,12 +7,13 @@
 .dtBase button {
   border: none;
   background-color: #eeeeee;
+  color: rgba(0, 0, 0, 0.8);
   padding: 3px 8px 3px 8px;
   transition: 0.25s;
 }
 .dtBase button:hover {
   background-color: rgba(99, 84, 196, 1);
-  color: white;
+  color: rgba(255, 255, 255, 0.8);
 }
 .dtBase a {
   text-decoration: none;
