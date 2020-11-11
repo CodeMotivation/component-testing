@@ -14,6 +14,12 @@
   margin: 0px 2px 0px 2px;
   font-size: 16px;
 }
-.dtPaginationSelectedNumber {
+.dtPaginationNumber.dtPaginationSelectedNumber {
+  background-color: #6354c4;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+.dtPaginationNumber.dtPaginationSelectedNumber:hover {
   color: #6354c4;
+  background-color: #eeeeee;
 }

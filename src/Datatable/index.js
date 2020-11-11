@@ -32,7 +32,6 @@ export const Datatable
          //when filterChanges change
     useEffect(() => {       
         if(filterChanges.rows||filterChanges.sort||filterChanges.text){
-            //  console.log(filterChanges)
              dataSetEffects(searchFilteredDataset); 
         }
      }, [filterChanges])
@@ -60,27 +59,32 @@ export const Datatable
     const onPaginationChange = (e)=>{
         const pageText = e.target.innerText;
         const page = parseInt(pageText);
-        if(typeof page === 'number') setFilters({...filters,page:page})
+        const maxpage = Math.ceil(searchFilteredDataset.length/filters.maximunRows);
+        if(!(page!==page)) setFilters({...filters,page:page})
         else {
+            let p=filters.page;;
             switch(pageText){
                 case '<':
-                    const p = filters.page;
-                    setFilters({...filters,page:(p>1?p-1:1)})
+                    setFilters({...filters,page:(p>1?(p-1):1)})
                     break;
-                case '>':
-                    const p = filters.page;
-                    setFilters({...filters,page:(p>1?p-1:1)})
+                case '>':      
+                    setFilters({...filters,page:(p<maxpage?(p+1):maxpage)})
                     break;
                 case '<<':
                     setFilters({...filters,page:1})
                     break;
                 case '>>':
-                    let p = filters.page;
-                    setFilters({...filters,page:(p>1?p-1:1)})
+                    setFilters({...filters,page:maxpage})
                     break;
-                
             }
+            console.log(filters.page);
         }
+    }
+    const onSortChanged = (_column)=>{
+        const currentColumn = filters.sortColumn
+        const currentOrder = filters.sortOrder
+        if(currentColumn === _column) setFilters({...filters,sortOrder:currentOrder=='ASC'?'DES':'ASC'})
+        else setFilters({...filters,sortColumn:_column,sortOrder:'ASC'})
     }
 
      //methods
@@ -127,12 +131,17 @@ export const Datatable
         return _dataset.slice(start,end);
     }
     const rowSortUpdate = (_dataset)=>{
-        return _dataset;
+        const comparison = filters.sortOrder === 'DES'?
+        (a,b)=>{return a[filters.sortColumn] > b[filters.sortColumn]}:
+        (a,b)=>{return a[filters.sortColumn] < b[filters.sortColumn]}
+        return _dataset.sort((a,b)=>{
+            return comparison(a,b)?-1
+            : a[filters.sortColumn] == b[filters.sortColumn]?0:1
+        })
     }
     const paginationFixer = (_dataset)=>{
         const count = _dataset.length
         const res = count/filters.maximunRows;
-        console.log(count+' '+filters.maximunRows+' '+res)
         return res<=1?1:filters.page;
     }
 
@@ -146,74 +155,101 @@ export const Datatable
     const onUpdate = (item)=>{
         console.log('update')
     }
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //  //cada vez que se cambia el filtro por texto
-    //  useEffect(() => {
-    //     if(searchFilter!==''){
-    //         const newDataset = initialDataset.filter(item=>{
-    //             return item['Name'].includes(filterText) ||
-    //                    item['Email'].includes(filterText) ||
-    //                    item['Deadline'].includes(filterText) ||
-    //                    item['Order Date'].includes(filterText)
-    //         });
-    //         setsearchFilteredDataset(newDataset);
-    //      }
-    // }, [searchFilter])
-    // //cada vez que se termina de filtrar por texto
-    //  useEffect(() => {
-    //     //  const dataSetAfterSortUpdate = rowSortUpdate(dataSetAfterRowCountUpdate)
-    //     const dataSetAfterRowCountUpdate = rowCountUpdate(searchFilteredDataset)
-    //     setDataSet(dataSetAfterSortUpdate)
-    // }, [searchFilteredDataset])
-
+    const onSplitPayment = ()=>{
+        console.log('split payment clicked');
+    }
 
     return (
-        <div className={styles.dtBase}>   
-        <Dashboard onSearchChange={onSearchChange} onRowCountChange={onRowCountChange} onUpdate={onUpdate}></Dashboard>
-            <table className={styles.dtTable}>
-                {/* header section */}
-                <thead>
-                    <tr className={styles.dtHeader}>
-                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Order Date'}</a></th>
-                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Name'}</a></th>
-                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Status'}</a></th>
-                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Paid Account'}</a></th>
-                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Type'}</a></th>
-                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Email'}</a></th>
-                        <th><a href='#'><span className={styles.dtSortArrow}>^</span> &nbsp; {'Deadline'}</a></th>
-                        <th><div>{'Actions'}</div></th>
-                    </tr>
-                </thead>
-                {/* body section */}
-                <tbody>
-                {dataSet.map((item,i)=>{
-                    return (
-                    <TableRow 
-                        key={i} item={item} 
-                        onCancel={onCancel} 
-                        onEdit={onEdit}
+            <div className={styles.dtBase}>   
+                <Dashboard 
+                    onSearchChange={onSearchChange} 
+                    onRowCountChange={onRowCountChange} 
+                    onUpdate={onUpdate}
+                    onSplitPayment={onSplitPayment}
+                />
+                <div className={styles.tableContainer}>
+                    <table className={styles.dtTable}>
+                        {/* header section */}
+                        <thead>
+                            <tr className={styles.dtHeader}>
+                                <th><a href='#' onClick={()=>onSortChanged('Order Date')}>
+                                            {filters.sortColumn ==='Order Date'?<span 
+                                            className={`${styles.dtSortArrow}
+                                            ${filters.sortOrder==='DES'?styles.dtSortArrowDown:''}`}>^</span>:''} 
+                                        &nbsp; {'Order Date'}
+                                </a>
+                            </th>
+                                <th>
+                                    <a href='#' onClick={()=>onSortChanged('Name')}>
+                                            {filters.sortColumn ==='Name'?<span 
+                                            className={`${styles.dtSortArrow}
+                                            ${filters.sortOrder==='DES'?styles.dtSortArrowDown:''}`}>^</span>:''} 
+                                        &nbsp; {'Name'}
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href='#' onClick={()=>onSortChanged('Status')}>
+                                            {filters.sortColumn ==='Status'?<span 
+                                            className={`${styles.dtSortArrow}
+                                            ${filters.sortOrder==='DES'?styles.dtSortArrowDown:''}`}>^</span>:''} 
+                                        &nbsp; {'Status'}
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href='#' onClick={()=>onSortChanged('Paid Account')}>
+                                            {filters.sortColumn ==='Paid Account'?<span 
+                                            className={`${styles.dtSortArrow}
+                                            ${filters.sortOrder==='DES'?styles.dtSortArrowDown:''}`}>^</span>:''} 
+                                        &nbsp; {'Paid Account'}
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href='#' onClick={()=>onSortChanged('Type')}>
+                                            {filters.sortColumn ==='Type'?<span 
+                                            className={`${styles.dtSortArrow}
+                                            ${filters.sortOrder==='DES'?styles.dtSortArrowDown:''}`}>^</span>:''} 
+                                        &nbsp; {'Type'}
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href='#' onClick={()=>onSortChanged('Email')}>
+                                            {filters.sortColumn ==='Email'?<span 
+                                            className={`${styles.dtSortArrow}
+                                            ${filters.sortOrder==='DES'?styles.dtSortArrowDown:''}`}>^</span>:''} 
+                                        &nbsp; {'Email'}
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href='#' onClick={()=>onSortChanged('Deadline')}>
+                                            {filters.sortColumn ==='Deadline'?<span 
+                                            className={`${styles.dtSortArrow}
+                                            ${filters.sortOrder==='DES'?styles.dtSortArrowDown:''}`}>^</span>:''} 
+                                        &nbsp; {'Deadline'}
+                                    </a>
+                                </th>
+                                <th><div>{'Actions'}</div></th>
+                            </tr>
+                        </thead>
+                        {/* body section */}
+                        <tbody>
+                        {dataSet.map((item,i)=>{
+                            return (
+                                <TableRow 
+                                key={i} item={item} 
+                                onCancel={onCancel} 
+                                onEdit={onEdit}
+                                />
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+                <Pagination 
+                    selectedPage = {filters.page}
+                    count = {searchFilteredDataset.length} 
+                    maximunRows={filters.maximunRows} 
+                    onPaginationChange={onPaginationChange} 
                     />
-                    );
-                })}
-                </tbody>
-            </table>
-            <Pagination 
-                selectedPage = {filters.page}
-                count = {searchFilteredDataset.length} 
-                maximunRows={filters.maximunRows} 
-                onPaginationChange={onPaginationChange} />
-        </div>
+            </div>
     )
 }

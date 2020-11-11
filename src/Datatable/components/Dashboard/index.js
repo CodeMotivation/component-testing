@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.css'
 
-export const Dashboard = ({onSearchChange,onRowCountChange,onUpdate}) => {
+export const Dashboard = ({onSearchChange,onRowCountChange,onUpdate,onSplitPayment}) => {
     return (
         <div className={styles.dtDashboard}>
             <div>
@@ -10,17 +10,17 @@ export const Dashboard = ({onSearchChange,onRowCountChange,onUpdate}) => {
             <div>
             <span>rows count &nbsp;</span>
             <select onChange={(e)=>{onRowCountChange(e)}}>
-                <option value="1">10</option>
-                <option value="2">20</option>
-                <option value="3">50</option>
-                <option value="10">100</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
             </select>
             </div>
             <div>
                 <button onClick={(e)=>{onUpdate(e)}}>Refresh</button>
             </div>
             <div>
-                <button>+ Split payment</button>
+                <button onClick={(e)=>onSplitPayment(e)}>+ Split payment</button>
             </div>
         </div>
     )

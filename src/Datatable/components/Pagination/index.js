@@ -8,7 +8,7 @@ export const Pagination = ({count,maximunRows,onPaginationChange,selectedPage}) 
         let pagesCounter = 1;
         while(pagesToPrint>0){
             pages.push(
-            <button 
+            <button
             key={pagesCounter}
                 className={`${styles.dtPaginationNumber} ${selectedPage===pagesCounter?styles.dtPaginationSelectedNumber:''}`}
                 onClick={(e)=>{onPaginationChange(e)}}
@@ -32,6 +32,11 @@ export const Pagination = ({count,maximunRows,onPaginationChange,selectedPage}) 
                 <button 
                 onClick={(e)=>{onPaginationChange(e)}}
                 className={styles.dtPaginationNumber}>
+                    {'<<'}
+                </button>
+                <button 
+                onClick={(e)=>{onPaginationChange(e)}}
+                className={styles.dtPaginationNumber}>
                     {'<'}
                 </button>
                     {pages}
@@ -39,6 +44,11 @@ export const Pagination = ({count,maximunRows,onPaginationChange,selectedPage}) 
                 onClick={(e)=>{onPaginationChange(e)}}
                 className={styles.dtPaginationNumber}>
                     {'>'}
+                </button>
+                <button 
+                onClick={(e)=>{onPaginationChange(e)}}
+                className={styles.dtPaginationNumber}>
+                    {'>>'}
                 </button>
             </div>
         </div>

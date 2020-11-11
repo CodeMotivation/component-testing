@@ -3,6 +3,8 @@
   display: flex;
   flex-direction: column;
   padding: 0px 10px 0px 10px;
+  width: calc(100% - 20px);
+  /* overflow-x: auto; */
 }
 .dtBase button {
   border: none;
@@ -28,11 +30,15 @@
 .dtBase select {
   font-size: 18px;
 }
-.dtTable {
-  border: solid;
-  border-width: 1px;
+.tableContainer {
+  max-height: 500px;
+  overflow: auto;
+  border: 1px solid;
   border-radius: 5px;
-  border-color: #333333;
+}
+.dtTable {
+  width: 100%;
+  border-collapse: collapse;
 }
 .dtTable > tr {
   border-width: 0px;
@@ -43,9 +49,12 @@
 .dtTable tr:hover {
   background-color: rgba(99, 84, 196, 0.16);
 }
-
 .dtHeader > th {
   background-color: #6354c4;
+  position: sticky;
+  top: 0;
+  /* border: 1px solid;
+  border-color: #ffffff; */
 }
 .dtHeader > th > a,
 .dtHeader > th > div {
@@ -67,8 +76,9 @@
 }
 
 .dtSortArrow {
-  transition: 0.1s;
+  transition: 0.3s;
 }
 .dtSortArrowDown {
-  transition: 0.1s;
+  transition: 0.3s;
+  transform: rotate(180deg);
 }
